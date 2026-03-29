@@ -7,13 +7,48 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import Link from "next/link";
 import { EyeIcon, EyeOffIcon, MailIcon } from "lucide-react";
 import { useState } from "react";
+import { signIn} from "@/lib/auth/auth-client";
+import { useRouter } from "next/navigation";
 
-export default function signIn() {
+export default function signInPage() {
   const [showPassword, setShowPassword] = useState(false)
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+  
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+  
+    const router = useRouter();
+  
+    async function handleSubmit(e: React.SubmitEvent) {
+      e.preventDefault();
+  
+      setError("");
+      setLoading(true);
+  
+      try {
+        const result = await signIn.email({
+          email,
+          password
+        });
+  
+          if (result.error) {
+            setError(result.error.message ?? "Failed to sign in. Please try again.");
+          } else {
+            // Handle successful sign in (e.g., redirect to dashboard)
+            router.push("/dashboard");
+          }
+      } catch (err) {
+        setError("An unexpected error occurred. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    }
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white px-4">
@@ -24,12 +59,15 @@ export default function signIn() {
             Welcome back! Please enter your details to sign in to your account
           </CardDescription>
         </CardHeader>
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <CardContent className="space-y-4">
+            {error && <p className="rounded-md p-3 text-destructive bg-destructive/15 text-sm">{error}</p>}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-gray-700">Email</Label>
               <InputGroup>
-                <InputGroupInput id="email" type="email" placeholder="john.doe@example.com" required 
+                <InputGroupInput id="email" type="email" placeholder="john.doe@example.com" required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 className="border-gray-300 focus:border-primary focus:ring-primary"/>
                 <InputGroupAddon align="inline-end">
                   <MailIcon className="h-4 w-4" />
@@ -44,6 +82,9 @@ export default function signIn() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter password"
                   required
+                  minLength={8}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="border-gray-300 focus:border-primary focus:ring-primary"
                 />
                 <InputGroupAddon align="inline-end">
@@ -64,8 +105,9 @@ export default function signIn() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-8">
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 py-6">
-              Sign In
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 py-6"
+              disabled={loading}>
+              {loading ? "Signing In..." : "Sign In"}
             </Button>
             <p className="text-center text-sm text-gray-600">
               Don't have an account? <Link href="/sign-up" className="font-medium text-primary hover:underline">
