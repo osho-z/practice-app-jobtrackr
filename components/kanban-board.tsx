@@ -46,7 +46,7 @@ function DroppableColumn({
   column, config, boardId}: {
     column: Column, config: ColConfig, boardId: string}) {
       return (
-        <Card className="min-w-300 shrink-0 shadow-md p-0">
+        <Card className="shrink-0 shadow-md p-0">
           <CardHeader className={`${config.color} text-white rounded-t-md pt-3 pb-3`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
