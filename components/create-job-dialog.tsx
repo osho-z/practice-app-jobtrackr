@@ -14,6 +14,27 @@ interface CreateJobApplicationDialogProps {
 
 export default function CreateJobApplicationDialog({columnId, boardId}: CreateJobApplicationDialogProps) {
   const [open, setOpen] = useState<boolean>(false);
+  const [formData, setFormData] = useState ({
+    company: "",
+    position: "",
+    location: "",
+    notes: "",
+    jobDescription: "",
+    salary: "",
+    jobUrl: "",
+    tags: "",
+  });
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+
+    } catch (err) {
+      console.error("Error creating job application:", err);
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
@@ -33,7 +54,7 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
         </DialogHeader>
         
         <ScrollArea className="h-90 w-full rounded-md p-4">
-          <form className="space-y-4 pr-4">
+          <form className="space-y-4 pr-4" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -45,6 +66,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     id="company"
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     required
+                    value={formData.company}
+                    onChange={(e) => setFormData({...formData, company: e.target.value})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -56,6 +79,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     id="position"
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     required
+                    value={formData.position}
+                    onChange={(e) => setFormData({...formData, position: e.target.value})}
                   />
                 </div>
               </div>
@@ -69,6 +94,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     type="text" 
                     id="location"
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={formData.location}
+                    onChange={(e) => setFormData({...formData, location: e.target.value})}
                   />
                 </div>
 
@@ -81,6 +108,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     id="salary"
                     placeholder="annual: $80000, $250000" 
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={formData.salary}
+                    onChange={(e) => setFormData({...formData, salary: e.target.value})}
                   />
                 </div>
               </div>
@@ -93,6 +122,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     id="jobUrl"
                     placeholder="https://example.com/job" 
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={formData.jobUrl}
+                    onChange={(e) => setFormData({...formData, jobUrl: e.target.value})}
                   />
               </div>
               <div className="space-y-2">
@@ -104,6 +135,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     id="tags"
                     placeholder="frontend, react, javascript" 
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={formData.tags}
+                    onChange={(e) => setFormData({...formData, tags: e.target.value})}
                   />
               </div>
               <div className="space-y-2">
@@ -115,6 +148,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     placeholder="Enter job description"
                     rows={3} 
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={formData.jobDescription}
+                    onChange={(e) => setFormData({...formData, jobDescription: e.target.value})}
                   />
               </div>
               <div className="space-y-2">
@@ -126,6 +161,8 @@ export default function CreateJobApplicationDialog({columnId, boardId}: CreateJo
                     placeholder="Enter notes"
                     rows={4}
                     className="mt-2 p-2 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={formData.notes}
+                    onChange={(e) => setFormData({...formData, notes: e.target.value})}
                   />
               </div>
             </div>
